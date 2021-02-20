@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include("parts/header"); %>
+</head>
+<body>
+    <%- include("parts/navbar"); %>
+    <main class="container mt-2">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title bg-danger text-light rounded-3 ps-3 pt-1 pb-1">Error</h5>
+                <div class="card-content">
+                    <h6>Message:</h6>
+                    <pre class="border border-danger p-1 rounded"><%= locals?.error?.message %></pre>
+                    <hr>
+                    <h6>Stack:</h6>
+                    <pre class="border border-danger p-1 rounded"><%=locals?.error?.stack%></pre>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
