@@ -20,7 +20,12 @@ class SequelizeLoader {
 
         Version.initialize(this.sequelize);
 
+        
         await this.sequelize.sync({alter: true});
+        
+        
+        Version.afterSync();
+        
         return this.sequelize;
     }
 
