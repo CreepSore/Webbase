@@ -8,9 +8,9 @@
 ## Web Routes
 Relevant files and folders:
   - src/web/*
-    - src/web/static
-    - src/web/ApiRouter.js
-    - src/web/ViewRouter.js
+    - [src/web/static](src/web/static/)
+    - [src/web/ApiRouter.js](src/web/ApiRouter.js)
+    - [src/web/ViewRouter.js](src/web/ApiRouter.js)
 
 ### src/web/static
 Static files accessible using `/<css|dependencies|js|favicon.jpg>` per default.
@@ -20,23 +20,23 @@ Adding more files and folders is possible and will be bound automatically and du
 Used to define API routes. Default is `v1`.  
 
 Default Endpoints:
-  - Models
+  - [Models](src/web/api/v1/models.js)
 
 ### src/web/ViewRouter.js
 Used to define frontend views.
-See `src/web/view/baseRouter.js` for examples.
+See [`src/web/view/baseRouter.js`](src/web/view/baseRouter.js) for examples.
 
 ---
 
 ## Db Models
 Relevant files and folders:
-  - src/loader/SequelizeLoader.js
-  - src/model/*
+  -  [src/loader/SequelizeLoader.js](src/loader/SequelizeLoader.js)
+  - [src/model/*](src/model/)
 
-To create a new model you have to define it as a new class inside the `src/model/` folder. After that you have to initialize it inside the `src/loader/SequelizeLoader.js:start()` function
+To create a new model you have to define it as a new class inside the [`src/model/`](src/model) folder. After that you have to initialize it inside the `src/loader/SequelizeLoader.js:start()` function
 
 Default Models:
-  - Version
+  - [Version](src/model/Version.js)
 
 ### Version
 Implements metadata of installed components. Can be used to automatically merge new components.
