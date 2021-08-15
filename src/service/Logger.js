@@ -51,7 +51,7 @@ class Logger {
         if(data.length === 0) toPrint = [level];
 
         let formattedLevel = data.length !== 0 && level ? `[${level.toUpperCase().padStart(8, " ")}]` : '';
-        if(this.formatToUnicode) formattedLevel = ` ${logLevelUnicodeMapping[String(level).toUpperCase()]} `;
+        if(this.formatToUnicode && logLevelUnicodeMapping[String(level).toUpperCase()]) formattedLevel = ` ${logLevelUnicodeMapping[String(level).toUpperCase()]} `;
 
         toPrint = toPrint.join(" ").split("\n").map(x => {
             return `${color ? color.date : ""}[${new Date().toISOString()}]${formattedLevel}${color ? color.text : ""} ${x}${linuxTerminalColors.reset}`
