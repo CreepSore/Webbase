@@ -32,10 +32,10 @@ const logLevelMapping = {
 };
 
 const logLevelUnicodeMapping = {
-    INFO: "ℹ️",
-    ERROR: "❌",
-    WARN: "⚠️",
-    CRITICAL: "🔥"
+    INFO: "i",
+    ERROR: "E",
+    WARN: "!",
+    CRITICAL: "🚨"
 }
 
 class Logger {
