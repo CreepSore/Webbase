@@ -1,0 +1,27 @@
+{
+  "name": "ts3bot",
+  "version": "1.0.0",
+  "description": "ehdes.com ts3 bot",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ehdes",
+  "license": "MIT",
+  "dependencies": {
+    "connect-session-sequelize": "^7.1.1",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "express-ws": "^5.0.2",
+    "helmet": "^4.6.0",
+    "mariadb": "^2.5.4",
+    "node-cron": "^3.0.0",
+    "sequelize": "^6.6.4",
+    "ts3-nodejs-library": "^3.3.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.5.6"
+  }
+}

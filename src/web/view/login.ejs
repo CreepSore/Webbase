@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+<%- include("parts/header.ejs"); %>
+<script src="/js/vue-components/notifications.js"></script>
+<script src="/js/login-form.js"></script>
+</head>
+<body class="bg-dark h-100">
+    <main id="login-form" class="h-100 d-flex">
+        <div class="d-none d-xl-block bg-success border-end border-light" style="min-width: 200px"></div>
+        <div class="container d-flex justify-content-center align-items-center h-100">
+            <div class="card border border-2 w-50" :class="`border-${alert.type || 'primary'}`" style="min-width: 315px;">
+                <div class="card-header">
+                    <h2>Login</h2>
+                </div>
+                <div class="card-body">
+                    <div id="login-form-alert" class="alert" :class="[`alert-${alert.type}`]" v-if="alert.message.length > 0">{{ alert.message }}</div>
+                    <input type="text" class="form-control mb-1" placeholder="Username" id="username" v-model="loginForm.username" aria-autocomplete="none">
+                    <input type="password" class="form-control mb-2" placeholder="Password" id="password" v-model="loginForm.password" aria-autocomplete="none">
+                    <button type="submit" class="btn form-control" :class="`btn-${alert.type || 'primary'}`" @click="doLogin">Login</button>
+                    <button class="btn btn-sm btn-outline-secondary form-control mt-2" @click="doRegister">Register</button>
+                </div>
+            </div>
+        </div>
+        <vue-notification :notifications="notifications" @remove-notification="removeNotification($event)"></vue-notification>
+    </main>
+
+    <script>
+        window.addEventListener("load", () => {
+            vue = new LoginForm(document.querySelector("#login-form"), document.querySelector("#vue-notification-container"));
+        });
+    </script>
+</body>
+</html>
