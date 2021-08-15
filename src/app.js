@@ -51,11 +51,7 @@ const overwriteConsoleLog = function() {
 
         toPrint.join(" ").split("\n").forEach(line => {
             let toAppend = `${color ? color.date : ""}[${new Date().toISOString()}]${data.length !== 0 ? `[${level.toUpperCase().padStart(8, " ")}]` : ''}${color ? color.text : ""} ${line}${linuxTerminalColors.reset}`;
-            /*fs.appendFile(LOG_PATH, `${toAppend}\n`, (err) => {
-                if(err) {
-                    originalLog("Failed to Append to logfile");
-                }
-            });*/
+
             originalLog(toAppend); 
         });
     };
