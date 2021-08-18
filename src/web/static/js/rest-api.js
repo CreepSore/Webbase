@@ -2,7 +2,7 @@
  * Implements a wrapper for RestAPI calls
  * @class RestApi
  */
-class RestApi {
+ class RestApi {
     static errorHandler(xhr, textStatus, error) {
         location.reload();
     }
@@ -98,5 +98,44 @@ class RestApi {
                     res(data);
                 }).catch(this.errorHandler);
         });
+    }
+
+    static modelCustomUrl(modelName, url, method, data = {}) {
+        return new Promise(res => {
+            $[method.toLowerCase()](`/api/v1/model/${modelName}${url}`, data)
+                .done((data, status, xhr) => {
+                    res(data);
+                }).catch(this.errorHandler);
+        });
+    }
+
+    static async getSessionParameter(param) {
+        return new Promise(res => {
+            $.get(`/api/v1/usermgmt/getSessionParameter/${param}`)
+                .done((data, status, xhr) => {
+                    res(data);
+                }).catch(this.errorHandler);
+        });
+    }
+
+    static async setSessionParameter(param, data) {
+        return new Promise(res => {
+            $.post(`/api/v1/usermgmt/setSessionParameter/${param}`, {value: data})
+                .done((data, status, xhr) => {
+                    res(data);
+                }).catch(this.errorHandler);
+        });
+    }
+
+    static async getAllTranslations() {
+        return await this.modelCustomUrl("Translation", `/getAll`, "GET");
+    }
+
+    static async getTranslation(locale, key, replaceKeys = {}) {
+        return await this.modelCustomUrl("Translation", `/getTranslation/${locale}/${key}`, "POST", replaceKeys);
+    }
+
+    static async setTranslation(locale, key, value) {
+        return await this.modelCustomUrl("Translation", `/setTranslation/${locale}/${key}`, "POST", {value});
     }
 }

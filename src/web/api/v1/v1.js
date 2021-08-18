@@ -1,5 +1,6 @@
 let express = require("express");
 
+let usermgmt = require("./usermgmt");
 let models = require("./models");
 
 /**
@@ -8,6 +9,7 @@ let models = require("./models");
 module.exports = function() {
     const router = express.Router();
 
+    router.use(usermgmt())
     router.use(models());
 
     return router;

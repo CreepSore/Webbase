@@ -23,7 +23,9 @@ class LoginForm {
                 addNotification: this.addNotification,
                 removeNotification: this.removeNotification
             }
-        }).component("vue-notification", Notifications.setupComponent()).mount(baseElement);
+        }).component("vue-notification", Notifications.setupComponent())
+            .component("vue-translatable", Translatable.setupComponent())
+            .mount(baseElement);
     }
 
     async updateAlert(message, type) {

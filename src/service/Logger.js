@@ -33,10 +33,11 @@ const logLevelMapping = {
 
 const logLevelUnicodeMapping = {
     INFO: "i",
+    WEBINFO: "🌐",
     ERROR: "E",
     WARN: "!",
     CRITICAL: "🚨"
-}
+};
 
 class Logger {
     static formatToUnicode = true;

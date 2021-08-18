@@ -1,7 +1,9 @@
 let {Sequelize} = require("sequelize");
-let Version = require("../model/Version");
 
 // Models
+let Version = require("../model/Version");
+let Locale = require("../model/Locale");
+let Translation = require("../model/Translation");
 
 class SequelizeLoader {
     /**
@@ -19,13 +21,15 @@ class SequelizeLoader {
         });
 
         Version.initialize(this.sequelize);
+        Locale.initialize(this.sequelize);
+        Translation.initialize(this.sequelize);
 
-        
+        Locale.hasMany(Translation);
+        Translation.belongsTo(Locale);
+
         await this.sequelize.sync({alter: true});
-        
-        
         Version.afterSync();
-        
+
         return this.sequelize;
     }
 
