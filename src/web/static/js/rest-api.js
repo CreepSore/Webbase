@@ -4,7 +4,7 @@
  */
  class RestApi {
     static errorHandler(xhr, textStatus, error) {
-        location.reload();
+        console.error(error, xhr, textStatus);
     }
 
     static login(username, password) {
@@ -127,6 +127,20 @@
         });
     }
 
+    static async runQuery(user, password, host, query, params = []) {
+        return new Promise((res, rej) => {
+            $.post(`/api/v1/runQuery/${user}/${password}/${host}`, {query, params})
+                .done((data, status, xhr) => {
+                    if(!data?.success) {
+                        this.errorHandler(null, null, data.error);
+                        rej(data.error);
+                        return;
+                    }
+                    res(data.data);
+                }).catch(this.errorHandler);
+        });
+    }
+
     static async getAllTranslations() {
         return await this.modelCustomUrl("Translation", `/getAll`, "GET");
     }
@@ -139,3 +153,5 @@
         return await this.modelCustomUrl("Translation", `/setTranslation/${locale}/${key}`, "POST", {value});
     }
 }
+
+module.exports = RestApi;

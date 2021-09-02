@@ -1,4 +1,5 @@
-let path = require("path");
+/* eslint-disable new-cap */
+"use strict";
 
 let {Model, DataTypes} = require("sequelize");
 let uuid = require("uuid");
@@ -29,7 +30,7 @@ class Translation extends Model {
                     await this.create({
                         LocaleId: locale.id,
                         translationKey: key
-                    })
+                    });
                 }
                 catch {
                     // we don't care about existing entries
@@ -76,7 +77,7 @@ class Translation extends Model {
                  * @param {import("express").Request} req
                  * @param {import("express").Response} res
                  */
-                handler: async (req, res) => {
+                handler: async(req, res) => {
                     const translations = await this.findAll({
                         include: [Locale]
                     });
@@ -91,7 +92,7 @@ class Translation extends Model {
                  * @param {import("express").Request} req
                  * @param {import("express").Response} res
                  */
-                handler: async (req, res) => {
+                handler: async(req, res) => {
                     const {locale, key} = req.params;
                     const translatedText = await this.getTranslation(key, locale, req.body || {});
 
@@ -101,7 +102,7 @@ class Translation extends Model {
             {
                 method: "POST",
                 relativePath: "/setTranslation/:locale/:key",
-                handler: async (req, res) => {
+                handler: async(req, res) => {
                     const {locale, key} = req.params;
                     let translation = await this.findOne({
                         where: {
@@ -123,7 +124,7 @@ class Translation extends Model {
 
                         // @ts-ignore
                         translation = await localeObj.createTranslation({
-                            translationKey: key, 
+                            translationKey: key,
                             value: req.body.value
                         });
                     }

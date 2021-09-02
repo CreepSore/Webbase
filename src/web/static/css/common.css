@@ -1,3 +1,37 @@
 .cursor-pointer {
     cursor: pointer;
 }
+
+.floating-sidebar {
+    --width: 50%;
+    position: fixed;
+    right: calc(var(--width) * -1 + 10px);
+    top: 0;
+    bottom: 0;
+    width: var(--width);
+    min-width: 200px;
+    background-color: white;
+    transition-duration: 0.25s;
+}
+
+.floating-sidebar:hover,
+.floating-sidebar:focus-within {
+    left: auto;
+    right: 0;
+}
+
+.font-monospace {
+    font-family: monospace
+}
+
+.dbwatcher-text-number {
+    color: rgb(132, 91, 245);
+}
+
+.dbwatcher-text-string {
+    color: rgb(185, 100, 51);
+}
+
+.dbwatcher-text-date {
+    --color: #000;
+}

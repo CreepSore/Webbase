@@ -1,3 +1,4 @@
+"use strict";
 let path = require("path");
 
 let express = require("express");
@@ -14,7 +15,7 @@ class ExpressLoader {
      * @param {import("../service/ConfigModel")["web"]} webConfig
      * @returns {Promise<express.Application>}
      */
-     async start(webConfig, sessionStore = null) {
+    async start(webConfig, sessionStore = null) {
         this.cfg = webConfig;
         this.app = express();
 

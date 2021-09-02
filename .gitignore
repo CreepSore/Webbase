@@ -1,6 +1,7 @@
 ###### Base gitignore
 config.json
 config.template.json
+storage.db
 
 ###### Default gitignore: Node
 # Logs

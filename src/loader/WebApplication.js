@@ -1,3 +1,4 @@
+"use strict";
 let path = require("path");
 
 let ExpressSessionStore = require("express-session").Store;
@@ -21,13 +22,20 @@ class WebApplication {
 
     /**
      * Starts the application
-     * @return {Promise<void>} 
+     * @return {Promise<void>}
      * @memberof WebApplication
      */
     async start() {
         if(this._running) return;
         const cfg = await this.loadConfig();
         this.sequelize = await this.sequelizeLoader.start(cfg.database);
+
+        if(!(await this.sequelizeLoader.checkDb())) {
+            console.log("CRITICAL", "Database not installed correctly. Please run [npm run install].");
+            await this.stop();
+            return;
+        }
+
         this.sessionStore = new SequelizeStore({
             db: this.sequelize
         });
@@ -40,7 +48,7 @@ class WebApplication {
 
     /**
      * Stops the application
-     * @return {Promise<void>} 
+     * @return {Promise<void>}
      * @memberof WebApplication
      */
     async stop() {

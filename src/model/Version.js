@@ -1,3 +1,5 @@
+/* eslint-disable new-cap */
+"use strict";
 let path = require("path");
 
 let {Model, DataTypes} = require("sequelize");
@@ -21,20 +23,20 @@ class Version extends Model {
             },
             major: {
                 type: DataTypes.VIRTUAL,
-                get: function() {
+                get() {
                     return Number((this.get("version") || "").split(".")[0], 10);
                 }
             },
             minor: {
                 type: DataTypes.VIRTUAL,
-                get: function() {
-                    return Number((this.get("version") || "").split(".")[1], 10)
+                get() {
+                    return Number((this.get("version") || "").split(".")[1], 10);
                 }
             },
             servicepack: {
                 type: DataTypes.VIRTUAL,
-                get: function() {
-                    return Number((this.get("version") || "").split(".")[2], 10)
+                get() {
+                    return Number((this.get("version") || "").split(".")[2], 10);
                 }
             }
         }, {
@@ -44,7 +46,7 @@ class Version extends Model {
 
     static async afterSync() {
         let schemaInfo = await Version.findOne({where: {component: "SCHEMA"}, raw: true});
-        
+
         if(!schemaInfo) {
             schemaInfo = await Version.create({
                 component: "SCHEMA",

@@ -42,16 +42,18 @@ class TranslationEditor {
                         return (!this.filters.locale || t.Locale.identifier === this.filters.locale)
                             && t.translationKey.toLowerCase().match(this.filters.key.toLowerCase().replace(/\*/g, ".*"))
                             && (!t.value || t.value.toLowerCase().match(this.filters.value.toLowerCase().replace(/\*/g, ".*")))
-                    });
+                    }).sort((a, b) => a.translationKey.localeCompare(b.translationKey))
+                        .sort((a, b) => a.Locale.name.localeCompare(b.Locale.name));
                 }
             }
         }).component("vue-notification", Notifications.setupComponent())
             .component("vue-translatable", Translatable.setupComponent())
             .mount(baseElement);
     }
-    
+
     async saveAllRows() {
         this.translations.forEach(translation => {
+            if(!translation.changed) return;
             this.saveTranslation(translation);
             translation.changed = false;
         });

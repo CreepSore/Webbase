@@ -11,9 +11,7 @@
         <vue-translatable
             :locale="'de'"
             :keys="{}"
-            :to-translate="{
-                
-            }">
+            :to-translate="{}">
             <template v-slot:default="translation">
                 <div class="container-fluid table-responsive">
                     <table class="table table-sm table-hover table-dark table-striped">
@@ -39,7 +37,7 @@
                         <tbody>
                             <tr v-for="translation in filteredTranslations">
                                 <th scope="row" class="align-middle">{{ translation.Locale.name }}</td>
-                                <td scope="row" class="align-middle">{{ translation.translationKey }}</td>
+                                <th scope="row" class="align-middle">{{ translation.translationKey }}</th>
                                 <td><input class="form-control form-control-sm" type="text" v-model="translation.value" @keydown="translation.changed = true;"></td>
                                 <td><input class="form-control btn btn-sm" :class="!translation.changed ? 'btn-secondary' : 'btn-primary'" type="button" value="Save" :disabled="!translation.changed" @click="saveTranslation(translation, $event)"></td>
                             </tr>

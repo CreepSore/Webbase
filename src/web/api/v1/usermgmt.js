@@ -1,11 +1,13 @@
+"use strict";
 let express = require("express");
 
 module.exports = function() {
+    // eslint-disable-next-line new-cap
     let router = express.Router();
 
     router.get("/api/v1/usermgmt/getSessionParameter/:param", function(req, res) {
         // @ts-ignore
-        let shared = req.session.shared;
+        let {shared} = req.session;
         res.send({success: true, data: (shared || {})[req.params.param]});
     });
 

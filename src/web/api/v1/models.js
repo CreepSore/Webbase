@@ -1,3 +1,4 @@
+"use strict";
 let express = require("express");
 
 let Version = require("../../../model/Version");
@@ -10,8 +11,9 @@ let Version = require("../../../model/Version");
  */
 
 module.exports = function() {
+    // eslint-disable-next-line new-cap
     let router = express.Router();
-    let models = Version.sequelize.models
+    let {models} = Version.sequelize;
 
     Object.keys(models).forEach(modelKey => {
         const Model = models[modelKey];

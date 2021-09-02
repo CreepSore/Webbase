@@ -1,3 +1,4 @@
+"use strict";
 let fs = require("fs");
 
 class ConfigModel {
@@ -7,15 +8,6 @@ class ConfigModel {
                 hostname: "127.0.0.1",
                 port: 8080,
                 sessionSecret: ""       // Leave empty to generate a random one
-            };
-
-            this.database = {
-                hostname: "127.0.0.1",
-                port: 3306,
-                username: "username",
-                password: "password",
-                database: "world",
-                dialect: "mysql"
             };
         }
     }
@@ -29,9 +21,9 @@ class ConfigModel {
     get(key, defaultValue = null) {
         let splittedKey = key.split(".");
         let result = this;
-        splittedKey.forEach(key => {
-            if(!key || result === null || result === undefined) return; 
-            result = result[key];
+        splittedKey.forEach(cfgKey => {
+            if(!cfgKey || result === null || result === undefined) return;
+            result = result[cfgKey];
         });
 
         return result !== null && result !== undefined ? result : defaultValue;

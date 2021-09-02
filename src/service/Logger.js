@@ -1,3 +1,4 @@
+"use strict";
 const linuxTerminalColors = {
     reset: "\x1b[0m",
     bright: "\x1b[1m",
@@ -21,7 +22,7 @@ const linuxTerminalColors = {
     bgblue: "\x1b[44m",
     bgmagenta: "\x1b[45m",
     bgcyan: "\x1b[46m",
-    bgwhite: "\x1b[47m",
+    bgwhite: "\x1b[47m"
 };
 
 const logLevelMapping = {
@@ -51,23 +52,23 @@ class Logger {
         let toPrint = data;
         if(data.length === 0) toPrint = [level];
 
-        let formattedLevel = data.length !== 0 && level ? `[${level.toUpperCase().padStart(8, " ")}]` : '';
+        let formattedLevel = data.length !== 0 && level ? `[${level.toUpperCase().padStart(8, " ")}]` : "";
         if(this.formatToUnicode && logLevelUnicodeMapping[String(level).toUpperCase()]) formattedLevel = ` ${logLevelUnicodeMapping[String(level).toUpperCase()]} `;
 
         toPrint = toPrint.join(" ").split("\n").map(x => {
-            return `${color ? color.date : ""}[${new Date().toISOString()}]${formattedLevel}${color ? color.text : ""} ${x}${linuxTerminalColors.reset}`
+            return `${color ? color.date : ""}[${new Date().toISOString()}]${formattedLevel}${color ? color.text : ""} ${x}${linuxTerminalColors.reset}`;
         });
 
         return toPrint.join("\n");
-    } 
+    }
 
     static replaceConsoleLog() {
         this.originalLog = console.log;
-        let originalLog = this.originalLog;
+        let {originalLog} = this;
         console.log = function(level, ...data) {
-            originalLog(Logger.getFormattedLog(level, ...data)); 
+            originalLog(Logger.getFormattedLog(level, ...data));
         };
-    };
+    }
 
     static restoreConsoleLog() {
         console.log = this.originalLog;

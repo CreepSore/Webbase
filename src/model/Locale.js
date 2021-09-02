@@ -1,5 +1,5 @@
-let path = require("path");
-
+/* eslint-disable new-cap */
+"use strict";
 let {Model, DataTypes} = require("sequelize");
 let uuid = require("uuid");
 
