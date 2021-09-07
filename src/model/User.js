@@ -6,35 +6,42 @@ let uuid = require("uuid");
 let {Model, DataTypes} = require("sequelize");
 
 let Permission = require("./Permission");
+let PermissionGroup = require("./PermissionGroup");
 
 class User extends Model {
     static get priority() {
         return 3;
     }
 
-    async addPermission(name) {
-        let permission = await Permission.getByName(name);
-        if(!permission) return false;
-
-        // @ts-ignore
-        User.addPermission(permission);
-        return true;
-    }
-
-    async removePermission(name) {
-        let permission = await Permission.getByName(name);
-        if(!permission) return false;
-
-        // @ts-ignore
-        User.removePermission(permission);
-        return true;
-    }
-
     async hasPermission(name) {
-        debugger;
+        // @ts-ignore
+        let user = await User.findByPk(this.id, {include: [
+            {
+                model: PermissionGroup,
+                include: [Permission]
+            }
+        ]});
+
+        if(!user) {
+            // @ts-ignore
+            console.log("ERROR", `User with id ${this.id} does not exist. This should very much not happen.`);
+            return false;
+        }
 
         // @ts-ignore
-        return false;
+        return (user.PermissionGroup?.Permissions || []).some(p => p.name === name);
+    }
+
+    async updatePermissionGroup(group) {
+        let newGroup = await PermissionGroup.findOne({where: {name: group}});
+        if(!newGroup) {
+            console.log("ERROR", `Group with name ${group} does not exist.`);
+            return;
+        }
+
+        // @ts-ignore
+        await this.setPermissionGroup(newGroup);
+        await this.save();
     }
 
     static async isValidUid(uid) {
@@ -74,8 +81,7 @@ class User extends Model {
                 type: DataTypes.STRING(255),
                 allowNull: true
             },
-            password: {
-                type: DataTypes.STRING(255),
+            password: {               type: DataTypes.STRING(255),
                 allowNull: false
             },
             active: {

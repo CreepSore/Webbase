@@ -29,6 +29,8 @@ class CliApplication {
         const handler = mapping[this.args._[0]];
         if(!handler) {
             console.log("ERROR", `Handler with name [${this.args._[0]}] not found.`);
+            console.log("INFO", "Available handlers:");
+            console.log("INFO", Object.keys(mapping).map(x => ` - ${x}`).join("\n"));
             return;
         }
 
