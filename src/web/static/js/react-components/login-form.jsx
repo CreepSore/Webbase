@@ -106,11 +106,10 @@ class LoginForm extends React.Component {
     }
 
     updateInputValue = (e) => {
+        this.state.input[e.target.name] = e.target.value;
         this.setState({
-            input: {
-                [e.target.name]: e.target.value
-            }
-        })
+            input: this.state.input
+        });
     }
 
     doLogin = async() => {

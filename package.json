@@ -5,6 +5,7 @@
   "main": "src/app.js",
   "scripts": {
     "start": "node ./src/app.js",
+    "cmd": "node ./src/app.js -c",
     "install": "node ./src/app.js -i",
     "uninstall": "node ./src/app.js -id",
     "update": "node ./src/app.js -iu",

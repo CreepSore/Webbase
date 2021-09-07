@@ -10,6 +10,8 @@ let uuid = require("uuid");
 let ApiRouter = require("../web/ApiRouter");
 let ViewRouter = require("../web/ViewRouter");
 
+let User = require("../model/User");
+
 class ExpressLoader {
     /**
      * @param {import("../service/ConfigModel")["web"]} webConfig
@@ -42,12 +44,18 @@ class ExpressLoader {
         this.app.use(express.static(path.resolve(__dirname, "..", "web", "static")));
 
         this.app.use(async(req, res, next) => {
+            // @ts-ignore
+            if(req.session.uid) {
+                // @ts-ignore
+                let user = await User.findByPk(req.session.uid);
+                res.locals.user = user;
+            }
             console.log("WEBINFO", `Request: [${req.method}]@[${req.url}] from [${JSON.stringify(req.ips)}]; SessionData: [${JSON.stringify(req.session)}]; Body: ${JSON.stringify(req.body)}`);
             next();
         });
 
-        this.apiRouter = ApiRouter.create(webConfig);
-        this.viewRouter = ViewRouter.create(webConfig);
+        this.apiRouter = ApiRouter.create();
+        this.viewRouter = ViewRouter.create();
 
         this.app.use(this.apiRouter);
         this.app.use(this.viewRouter);

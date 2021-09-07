@@ -11,10 +11,6 @@ module.exports = function() {
         res.render("login");
     });
 
-    router.get("/dbtools/watcher", (req, res) => {
-        res.render("dbtools/watcher");
-    });
-
     router.use(adminRouter());
 
     return router;
