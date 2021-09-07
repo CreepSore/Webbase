@@ -1,6 +1,8 @@
 "use strict";
 let express = require("express");
 
+let User = require("../../../model/User");
+
 module.exports = function() {
     // eslint-disable-next-line new-cap
     let router = express.Router();
@@ -17,6 +19,45 @@ module.exports = function() {
         // @ts-ignore
         req.session.shared[req.params.param] = req.body.value;
         res.send({success: true});
+    });
+
+    router.post("/api/v1/usermgmt/register", async(req, res) => {
+        const {username, password} = req.body;
+        if(!username || !password) return res.json({success: false, error: "Please specify a username and a password."}).end();
+
+        const existingUser = await User.findOne({where: {username}});
+        if(existingUser) return res.json({success: false, error: "Username does already exist"}).end();
+
+
+        await User.create({
+            username,
+            password: User.hashPassword(password),
+            active: false
+        });
+
+        return res.json({success: true, message: "User created. Please contact the admininstrator to activate your account."}).end();
+    });
+
+    router.post("/api/v1/usermgmt/login", async(req, res) => {
+        // @ts-ignore
+        if(await User.isValidUid(req.session.uid)) return res.json({success: false, error: "You are already logged in!", href: "/"}).end();
+        const {username, password} = req.body;
+
+        if(!username || !password) return res.json({success: false, error: "Please specify a username and a password."}).end();
+
+        let loggedOnUser = await User.doLogin(username, password);
+        if(!loggedOnUser) {
+            return res.json({success: false, error: "Invalid username or password"}).end();
+        }
+
+        // @ts-ignore
+        if(!loggedOnUser.active) {
+            return res.json({success: false, error: "Please contact the admininstrator to activate your account."}).end();
+        }
+
+        // @ts-ignore
+        req.session.uid = loggedOnUser.id;
+        return res.json({success: true, reload: true}).end();
     });
 
     return router;

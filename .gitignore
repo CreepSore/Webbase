@@ -3,6 +3,9 @@ config.json
 config.template.json
 storage.db
 
+# they're inside the sources anyway??
+*.LICENSE.txt
+
 ###### Default gitignore: Node
 # Logs
 logs

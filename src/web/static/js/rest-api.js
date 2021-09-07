@@ -155,4 +155,6 @@
     }
 }
 
+// @ts-ignore
+window.RestApi = RestApi;
 module.exports = RestApi;

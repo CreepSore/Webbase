@@ -75,7 +75,9 @@ class TranslationEditor extends React.Component {
     setChanged = (id, changed) => {
         let changedTranslations = this.state.changedTranslations;
         if (changed) {
-            changedTranslations.push(id);
+            if(!changedTranslations.includes(id)) {
+                changedTranslations.push(id);
+            }
         } else {
             changedTranslations = changedTranslations.filter(t => t !== id);
         }
@@ -92,14 +94,13 @@ class TranslationEditor extends React.Component {
     }
 
     saveAllRows = async() => {
-        let translations = this.state.changedTranslations;
-        await Promise.all(translations.map(id => this.saveTranslation(id)));
+        await Promise.all(this.state.changedTranslations.map(id => this.saveTranslation(id)));
     }
 
     saveTranslation = async(id) => {
-        this.setChanged(id, false);
         let translation = this.state.translations.find(t => t.id === id);
         await RestApi.setTranslation(translation.Locale.identifier, translation.translationKey, translation.value);
+        this.setChanged(id, false);
     }
 
     setTranslationData = (id, value) => {

@@ -3,10 +3,11 @@ let minimist = require("minimist");
 
 let Application = require("./loader/WebApplication");
 let Installer = require("./loader/InstallerApplication");
+let Cli = require("./loader/CliApplication");
 let Logger = require("./service/Logger");
 
-const launchNormal = async function(argv) {
-    let app = new Application(argv);
+const launchNormal = async function() {
+    let app = new Application();
     let exitHandler = () => app.stop();
 
     process.on("SIGINT", exitHandler);
@@ -23,16 +24,22 @@ const lauchInstaller = async function(argv) {
     await installer.start();
 };
 
+const launchCli = async function(argv) {
+    let cli = new Cli(argv);
+    await cli.start();
+};
+
 const main = async function() {
     Logger.replaceConsoleLog();
 
     const argv = minimist(process.argv.slice(2), {
-        "boolean": ["install", "update", "drop", "log"],
+        "boolean": ["install", "update", "drop", "log", "command"],
         alias: {
             install: "i",
             update: "u",
             drop: "d",
-            log: "l"
+            log: "l",
+            command: "c"
         }
     });
 
@@ -41,7 +48,12 @@ const main = async function() {
         return;
     }
 
-    launchNormal(argv);
+    if(argv.command) {
+        launchCli(argv);
+        return;
+    }
+
+    launchNormal();
 };
 
 main();

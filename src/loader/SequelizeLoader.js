@@ -7,6 +7,10 @@ let {Sequelize} = require("sequelize");
 let Version = require("../model/Version");
 let Locale = require("../model/Locale");
 let Translation = require("../model/Translation");
+let User = require("../model/User");
+let Permission = require("../model/Permission");
+let PermissionGroup = require("../model/PermissionGroup");
+
 /**
  * @typedef {Object} SyncActions
  * @property {boolean=} drop
@@ -52,9 +56,18 @@ class SequelizeLoader {
         Version.initialize(this.sequelize);
         Locale.initialize(this.sequelize);
         Translation.initialize(this.sequelize);
+        Permission.initialize(this.sequelize);
+        PermissionGroup.initialize(this.sequelize);
+        User.initialize(this.sequelize);
 
         Locale.hasMany(Translation);
         Translation.belongsTo(Locale);
+
+        User.belongsTo(PermissionGroup);
+        PermissionGroup.hasMany(User);
+
+        PermissionGroup.belongsToMany(Permission, {through: "PermissionGroupPermissions"});
+        Permission.belongsToMany(PermissionGroup, {through: "PermissionGroupPermissions"});
 
         if(syncActions.drop) {
             if(!syncActions.dropFilter) {
@@ -83,9 +96,28 @@ class SequelizeLoader {
         if(syncActions.sync) {
             try {
                 await this.sequelize.sync({alter: !syncActions.drop && syncActions.alter});
+                if(syncActions.drop || !syncActions.alter) {
+                    await Promise.all(Object.keys(this.sequelize.models)
+                        .map(key => this.sequelize.models[key])
+                        .sort((a, b) => {
+                            // @ts-ignore
+                            if((a.priority || 999) > (b.priority  || 999)) return -1;
+                            // @ts-ignore
+                            if((a.priority || 999) < (b.priority  || 999)) return 1;
+                            return 0;
+                        })
+                        .map(async Model => {
+                            // @ts-ignore
+                            if(Model.onFirstInstall) {
+                                // @ts-ignore
+                                await Model.onFirstInstall();
+                                console.log("INFO", `Running first install initialization for model [${Model.name}]`);
+                            }
+                        }));
+                }
             }
             catch(err) {
-                console.log("CRITICAL", `Failed to sync database properly: ${JSON.stringify(err, null, 2)}`);
+                console.log("CRITICAL", `Failed to sync database properly: ${JSON.stringify(err, null, 2)}; ${err}`);
                 process.exit(1);
             }
 

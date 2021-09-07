@@ -33,6 +33,18 @@ class Locale extends Model {
             sequelize
         });
     }
+
+    static async onFirstInstall() {
+        try {
+            await Locale.bulkCreate([
+                {identifier: "en", name: "English"},
+                {identifier: "de", name: "Deutsch"}
+            ]);
+        }
+        catch(err) {
+            console.log("ERROR", "Couldn't initialize default locales properly.");
+        }
+    }
 }
 
 module.exports = Locale;
