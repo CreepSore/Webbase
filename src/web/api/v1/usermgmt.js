@@ -55,6 +55,10 @@ module.exports = function() {
             return res.json({success: false, error: "Please contact the admininstrator to activate your account."}).end();
         }
 
+        if(!(await loggedOnUser.hasPermission("LOGIN"))) {
+            return res.json({success: false, error: "You do not have the permission to login."}).end();
+        }
+
         // @ts-ignore
         req.session.uid = loggedOnUser.id;
         return res.json({success: true, reload: true}).end();
