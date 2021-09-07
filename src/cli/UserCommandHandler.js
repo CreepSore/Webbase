@@ -79,7 +79,7 @@ where and data are JSON strings. Remember to put them in apastrophes.`);
     }
 
     static async exists(uid) {
-        console.log("INFO", (await User.isValidUid(args[2])) ? `User with id ${args[1]} exists.` : `User with id ${args[1]} does not exist.`);
+        console.log("INFO", (await User.isValidUid(uid)) ? `User with id ${uid} exists.` : `User with id ${uid} does not exist.`);
     }
 }
 
