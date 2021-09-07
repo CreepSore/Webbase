@@ -2,67 +2,11 @@
 <html lang="en" class="h-100">
 <head>
 <%- include("../../parts/header.ejs"); %>
-<script src="/js/vue-components/notifications.js"></script>
-<script src="/js/vue-components/translatable.js"></script>
-<script src="/js/translation-editor.js"></script>
+<script src="/js/compiled/translationEditor.js"></script>
 </head>
 <body class="bg-dark h-100">
-    <main id="translation-editor" class="h-100 d-flex">
-        <vue-translatable
-            :locale="'de'"
-            :keys="{}"
-            :to-translate="{}">
-            <template v-slot:default="translation">
-                <div class="container-fluid table-responsive">
-                    <table class="table table-sm table-hover table-dark table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">Locale</th>
-                                <th scope="col">Key</th>
-                                <th scope="col">Value</th>
-                                <th scope="col">Save</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <select class="form-select" v-model="filters.locale">
-                                        <option value="" selected></option>
-                                        <option v-for="locale in locales" :value="locale.identifier">{{ locale.name }}</option>
-                                    </select>
-                                </td>
-                                <td><input class="form-control" type="text" v-model="filters.key"></td>
-                                <td><input class="form-control" type="text" v-model="filters.value"></td>
-                                <td><input class="form-control btn btn-primary" type="button" value="Save all" @click="saveAllRows()"></td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="translation in filteredTranslations">
-                                <th scope="row" class="align-middle">{{ translation.Locale.name }}</td>
-                                <th scope="row" class="align-middle">{{ translation.translationKey }}</th>
-                                <td><input class="form-control form-control-sm" type="text" v-model="translation.value" @keydown="translation.changed = true;"></td>
-                                <td><input class="form-control btn btn-sm" :class="!translation.changed ? 'btn-secondary' : 'btn-primary'" type="button" value="Save" :disabled="!translation.changed" @click="saveTranslation(translation, $event)"></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <select class="form-select form-select-sm" v-model="emptyRow.Locale.identifier" @change="emptyRow.changed = true;">
-                                        <option v-for="locale in locales" :value="locale.identifier">{{ locale.name }}</option>
-                                    </select>
-                                </td>
-                                <td><input class="form-control form-control-sm" type="text" v-model="emptyRow.translationKey" @keydown="emptyRow.changed = true;"></td>
-                                <td><input class="form-control form-control-sm" type="text" v-model="emptyRow.value" @keydown="emptyRow.changed = true;"></td>
-                                <td><input class="form-control btn btn-sm" :class="!emptyRow.changed ? 'btn-secondary' : 'btn-primary'" type="button" value="Save" :disabled="!emptyRow.changed" @click="saveNewRow(emptyRow, $event)"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </template>
-        </vue-translatable>
-        <vue-notification :notifications="notifications" @remove-notification="removeNotification($event)"></vue-notification>
+    <main id="translation-editor" class="h-100 d-flex w-100">
+        
     </main>
-
-    <script>
-        window.addEventListener("load", () => {
-            vue = new TranslationEditor(document.querySelector("#translation-editor"), document.querySelector("#vue-notification-container"));
-        });
-    </script>
 </body>
 </html>

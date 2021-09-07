@@ -6,35 +6,7 @@
 </head>
 <body class="bg-dark h-100">
     <main id="login-form" class="h-100 d-flex">
-        <vue-translatable
-            :locale="'de'"
-            :keys="{}"
-            :to-translate="{
-                header: 'LOGIN::HEADER',
-                btnLogin: 'LOGIN::BTN::LOGIN',
-                btnRegister: 'LOGIN::BTN::REGISTER',
-                placeholderUsername: 'LOGIN::PLACEHOLDER::USERNAME',
-                placeholderPassword: 'LOGIN::PLACEHOLDER::PASSWORD'
-            }">
-            <template v-slot:default="translation">
-                <div class="d-none d-xl-block bg-success border-end border-light" style="min-width: 200px"></div>
-                <div class="container d-flex justify-content-center align-items-center h-100">
-                    <div class="card border border-2 w-50" :class="`border-${alert.type || 'primary'}`" style="min-width: 315px;">
-                        <div class="card-header">
-                            <h2>{{ translation.t.header }}</h2>
-                        </div>
-                        <div class="card-body">
-                            <div id="login-form-alert" class="alert" :class="[`alert-${alert.type}`]" v-if="alert.message.length > 0">{{ alert.message }}</div>
-                            <input type="text" class="form-control mb-1" :placeholder="translation.t.placeholderUsername" id="username" v-model="loginForm.username" aria-autocomplete="none">
-                            <input type="password" class="form-control mb-2" :placeholder="translation.t.placeholderPassword" id="password" v-model="loginForm.password" aria-autocomplete="none">
-                            <button type="submit" class="btn form-control" :class="`btn-${alert.type || 'primary'}`" @click="doLogin">{{ translation.t.btnLogin }}</button>
-                            <button class="btn btn-sm btn-outline-secondary form-control mt-2" @click="doRegister">{{ translation.t.btnRegister }}</button>
-                        </div>
-                    </div>
-                </div>
-            </template>
-            <vue-notifications :notifications="notifications" @remove-notification="removeNotification($event)"></vue-notifications>
-        </vue-translatable>
+        
     </main>
 </body>
 </html>

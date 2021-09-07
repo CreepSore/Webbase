@@ -5,6 +5,7 @@
  class RestApi {
     static errorHandler(xhr, textStatus, error) {
         console.error(error, xhr, textStatus);
+        return {success: false, error};
     }
 
     static login(username, password) {
