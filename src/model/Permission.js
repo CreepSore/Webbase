@@ -42,7 +42,8 @@ class Permission extends Model {
         try {
             await Permission.bulkCreate([
                 {name: "ALL", description: "Wildcard permission"},
-                {name: "LOGIN", description: "Login permission"}
+                {name: "LOGIN", description: "Login permission"},
+                {name: "TRANSLATE", description: "Permissions to use the translation page"}
             ]);
         }
         catch(err) {

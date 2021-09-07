@@ -42,7 +42,7 @@ class PermissionGroup extends Model {
 
     static async onFirstInstall() {
         try {
-            const group = await PermissionGroup.create({
+            const defaultGroup = await PermissionGroup.create({
                 name: "DEFAULT",
                 description: "Default permission group"
             });
@@ -55,10 +55,24 @@ class PermissionGroup extends Model {
 
             await Promise.all(defaultPerms.map(async perm => {
                 // @ts-ignore
-                await group.addPermission(perm);
+                await defaultGroup.addPermission(perm);
                 // @ts-ignore
                 console.log("INFO", `Added default permission [${perm.name}] to group [DEFAULT]`);
             }));
+
+            let adminGroup = await PermissionGroup.create({
+                name: "ADMIN",
+                description: "Admin permission group"
+            });
+
+            let adminPerms = await Permission.findOne({
+                where: {
+                    name: "ALL"
+                }
+            });
+
+            // @ts-ignore
+            await adminGroup.addPermission(adminPerms);
         }
         catch(err) {
             console.log("ERROR", `Couldn't initialize default permgroups properly: ${err}`);

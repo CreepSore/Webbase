@@ -29,7 +29,7 @@ class User extends Model {
         }
 
         // @ts-ignore
-        return (user.PermissionGroup?.Permissions || []).some(p => p.name === name);
+        return (user.PermissionGroup?.Permissions || []).some(p => p.name === name || p.name === "ALL");
     }
 
     async updatePermissionGroup(group) {
