@@ -14,6 +14,11 @@ class User extends Model {
     }
 
     async hasPermission(name) {
+        let permission = await Permission.findOne({where: {name}});
+        if(!permission) {
+            await Permission.create({name});
+        }
+
         // @ts-ignore
         let user = await User.findByPk(this.id, {include: [
             {
