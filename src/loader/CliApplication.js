@@ -1,10 +1,12 @@
 "use strict";
 let ModelCommandHandler = require("../cli/ModelCommandHandler.js");
 let UserCommandHandler = require("../cli/UserCommandHandler.js");
+let PermissionCommandHandler = require("../cli/PermissionCommandHandler.js");
 
 const mapping = {
     model: ModelCommandHandler,
-    user: UserCommandHandler
+    user: UserCommandHandler,
+    perm: PermissionCommandHandler
 };
 
 class CliApplication {

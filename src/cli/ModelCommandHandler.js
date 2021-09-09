@@ -21,7 +21,7 @@ class ModelCommandHandler {
   model <model> delete <where>
   model <model> update <data> <where>
   model <model> create <data>
-  
+
 where and data are JSON strings. Remember to put them in apastrophes.`);
 
             return;

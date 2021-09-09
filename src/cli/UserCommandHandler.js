@@ -19,7 +19,7 @@ class UserCommandHandler {
   user setPermissionGroup <uid> <group>
   user create <username> <password> [email]
   user help
-  
+
 where and data are JSON strings. Remember to put them in apastrophes.`);
 
             return;

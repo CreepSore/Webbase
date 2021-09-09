@@ -6,9 +6,9 @@
   "scripts": {
     "start": "node ./src/app.js",
     "cmd": "node ./src/app.js -c",
-    "install": "node ./src/app.js -i",
-    "uninstall": "node ./src/app.js -id",
-    "update": "node ./src/app.js -iu",
+    "dbinstall": "node ./src/app.js -i",
+    "dbuninstall": "node ./src/app.js -id",
+    "dbupdate": "node ./src/app.js -iu",
     "lint": "eslint ./src ./test",
     "lintautofix": "eslint --fix ./src ./test",
     "dev": "npm run lint && npx webpack --progress --mode development && node ./src/app.js",
