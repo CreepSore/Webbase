@@ -13,7 +13,7 @@ class CliApplication {
     _running = false;
 
     /**
-     * Creates an instance of InstallerApplication.
+     * Creates an instance of CliApplication.
      * @memberof CliApplication
      */
     constructor(args) {
