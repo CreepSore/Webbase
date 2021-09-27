@@ -40,23 +40,36 @@ module.exports = function() {
 
     router.post("/api/v1/usermgmt/login", async(req, res) => {
         // @ts-ignore
-        if(await User.isValidUid(req.session.uid)) return res.json({success: false, error: "You are already logged in!", href: "/"}).end();
+        if(await User.isValidUid(req.session.uid))
+            return res
+                .json({success: false, error: "You are already logged in!", href: "/"})
+                .end();
+
         const {username, password} = req.body;
 
-        if(!username || !password) return res.json({success: false, error: "Please specify a username and a password."}).end();
+        if(!username || !password)
+            return res
+                .json({success: false, error: "Please specify a username and a password."})
+                .end();
 
         let loggedOnUser = await User.doLogin(username, password);
         if(!loggedOnUser) {
-            return res.json({success: false, error: "Invalid username or password"}).end();
+            return res
+                .json({success: false, error: "Invalid username or password"})
+                .end();
         }
 
         // @ts-ignore
         if(!loggedOnUser.active) {
-            return res.json({success: false, error: "Please contact the admininstrator to activate your account."}).end();
+            return res
+                .json({success: false, error: "Please contact the admininstrator to activate your account."})
+                .end();
         }
 
         if(!(await loggedOnUser.hasPermission("LOGIN"))) {
-            return res.json({success: false, error: "You do not have the permission to login."}).end();
+            return res
+                .json({success: false, error: "You do not have the permission to login."})
+                .end();
         }
 
         // @ts-ignore
