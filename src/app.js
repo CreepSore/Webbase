@@ -44,16 +44,16 @@ const main = async function() {
     });
 
     if(argv.install) {
-        lauchInstaller(argv);
+        await lauchInstaller(argv);
         return;
     }
 
     if(argv.command) {
-        launchCli(argv);
+        await launchCli(argv);
         return;
     }
 
-    launchNormal();
+    await launchNormal();
 };
 
 main();

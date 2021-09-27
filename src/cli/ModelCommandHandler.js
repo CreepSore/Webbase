@@ -29,25 +29,25 @@ where and data are JSON strings. Remember to put them in apastrophes.`);
 
         try {
             if(args[1] === "metadata") {
-                await ModelCommandHandler.getMetadata(Model);
+                await this.getMetadata(Model);
             }
             else if(args[1] === "get") {
-                await ModelCommandHandler.get(Model);
+                await this.get(Model);
             }
             else if(args[1] === "getByPk") {
-                await ModelCommandHandler.getByPk(Model, args[2]);
+                await this.getByPk(Model, args[2]);
             }
             else if(args[1] === "getFilter") {
-                await ModelCommandHandler.getFilter(Model, JSON.parse(args[2]));
+                await this.getFilter(Model, JSON.parse(args[2]));
             }
             else if(args[1] === "delete") {
-                await ModelCommandHandler.delete(Model, JSON.parse(args[2]));
+                await this.delete(Model, JSON.parse(args[2]));
             }
             else if(args[1] === "update") {
-                await ModelCommandHandler.update(Model, JSON.parse(args[2]), JSON.parse(args[3]));
+                await this.update(Model, JSON.parse(args[2]), JSON.parse(args[3]));
             }
             else if(args[1] === "create") {
-                await ModelCommandHandler.create(Model, JSON.parse(args[2]));
+                await this.create(Model, JSON.parse(args[2]));
             }
             else {
                 console.log("ERROR", `Invalid command [${args[1]}] specified.`);

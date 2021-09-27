@@ -13,18 +13,13 @@ let ViewRouter = require("../web/ViewRouter");
 let User = require("../model/User");
 
 class ExpressLoader {
-    /**
-     * @param {import("../service/ConfigModel")["web"]} webConfig
-     * @returns {Promise<express.Application>}
-     */
-    async start(webConfig, sessionStore = null) {
-        this.cfg = webConfig;
-        this.app = express();
-
+    async setConfig() {
         this.app.set("trust proxy", true);
         this.app.set("view engine", "ejs");
         this.app.set("views", path.resolve(__dirname, "..", "web", "view"));
+    }
 
+    async initializeMiddleware() {
         this.app.use(helmet({
             contentSecurityPolicy: false
         }));
@@ -53,12 +48,27 @@ class ExpressLoader {
             console.log("WEBINFO", `Request: [${req.method}]@[${req.url}] from [${JSON.stringify(req.ips)}]; SessionData: [${JSON.stringify(req.session)}]; Body: ${JSON.stringify(req.body)}`);
             next();
         });
+    }
 
+    async initializeUserexit() {
         this.apiRouter = ApiRouter.create();
         this.viewRouter = ViewRouter.create();
 
         this.app.use(this.apiRouter);
         this.app.use(this.viewRouter);
+    }
+
+    /**
+     * @param {import("../service/ConfigModel")["web"]} webConfig
+     * @returns {Promise<express.Application>}
+     */
+    async start(webConfig, sessionStore = null) {
+        this.cfg = webConfig;
+        this.app = express();
+
+        await this.setConfig();
+        await this.initializeMiddleware();
+        await this.initializeUserexit();
 
         this.server = this.app.listen(this.cfg.port, this.cfg.hostname);
 
