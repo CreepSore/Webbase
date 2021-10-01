@@ -9,18 +9,28 @@ class CustomerLogicFactory {
         let handler = new CustomerLogicHandler();
         let resolvedLogicPath = CustomerLogicFactory.getCustomerLogicPath();
 
-        await Promise.all((await fs.promises.readdir(resolvedLogicPath))
-            .map(async file => {
-                if (!file.endsWith(".js") || file.startsWith("_")) return;
+        let files = fs.readdirSync(resolvedLogicPath);
+        let toAwait = files
+            .filter(x => fs.statSync(path.join(resolvedLogicPath, x)).isDirectory())
+            .map(async pluginDirectory => {
+                let finalPath = path.join(resolvedLogicPath, pluginDirectory, "index.js");
+                if(!fs.existsSync(finalPath)) {
+                    console.log("WARN", `No index.js found at [${finalPath}]`);
+                    return;
+                }
+
                 try {
-                    let LogicConstructor = require(path.join(resolvedLogicPath, file));
+                    let LogicConstructor = require(finalPath);
                     let logicInstance = new LogicConstructor();
                     await handler.registerCustomerLogic(logicInstance, false);
                 }
                 catch(error) {
+                    console.log("ERROR", `An error occured while trying to load plugin at [${finalPath}]`);
                     console.log("ERROR", error);
                 }
-            }));
+            });
+
+        await Promise.all(toAwait);
 
         await handler.loadAllCustomerImplementations();
         return handler;
@@ -34,3 +44,14 @@ class CustomerLogicFactory {
 }
 
 module.exports = CustomerLogicFactory;
+
+/**
+try {
+    let LogicConstructor = require(path.join(resolvedLogicPath, file));
+    let logicInstance = new LogicConstructor();
+    await handler.registerCustomerLogic(logicInstance, false);
+}
+catch(error) {
+    console.log("ERROR", error);
+}
+ */

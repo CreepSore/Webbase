@@ -1,17 +1,17 @@
 "use strict";
 let path = require("path");
 
-let CustomerLogic = require("../service/customer-logic/CustomerLogic");
-let ExpressLoader = require("../loader/ExpressLoader");
+let CustomerLogic = require("../../service/customer-logic/CustomerLogic");
+let ExpressLoader = require("../../loader/ExpressLoader");
 
-let Translation = require("../model/Translation");
-let Locale = require("../model/Locale");
-let Version = require("../model/Version");
-let LanguageService = require("../service/database-logic/LanguageService");
+let Translation = require("../../model/Translation");
+let Locale = require("../../model/Locale");
+let Version = require("../../model/Version");
+let LanguageService = require("../../service/database-logic/LanguageService");
 
 /**
- * @typedef {import("../service/customer-logic/types").ExpressInitializationParams} ExpressInitializationParams
- * @typedef {import("../service/customer-logic/types").SequelizeInitializationParams} SequelizeInitializationParams
+ * @typedef {import("../../service/customer-logic/types").ExpressInitializationParams} ExpressInitializationParams
+ * @typedef {import("../../service/customer-logic/types").SequelizeInitializationParams} SequelizeInitializationParams
  */
 
 class CustomLoginLogic extends CustomerLogic {
@@ -53,7 +53,7 @@ class CustomLoginLogic extends CustomerLogic {
 
     /**
      * @static
-     * @return {import("../loader/ExpressLoader").CustomRoute[]}
+     * @return {import("../../loader/ExpressLoader").CustomRoute[]}
      * @memberof CustomLoginLogic
      */
     static getTranslationCustomExpressRoutes() {
