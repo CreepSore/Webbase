@@ -8,6 +8,7 @@ let Version = require("../../../model/Version");
  * @property {string} method
  * @property {string} relativePath
  * @property {Function} handler
+ * @property {boolean=} ignorePermissions
  */
 
 module.exports = function() {
@@ -32,7 +33,7 @@ module.exports = function() {
                 const url = `/api/v1/model/${modelKey}${route.relativePath}`;
                 router[route.method.toLowerCase()](url, async(req, res, next) => {
                     const permKey = `MODEL:${modelKey}:${route.relativePath}:${route.method.toUpperCase()}`;
-                    if(!res.locals.user || !(await res.locals.user.hasPermission(permKey))) {
+                    if(!route.ignorePermissions && (!res.locals.user || !(await res.locals.user.hasPermission(permKey)))) {
                         console.log("ERROR", `User [${res.locals.user}] does not have permission to access [${url}]; required permission = [${permKey}]`);
                         return res.json({success: false, error: "INVALID_PERMISSION"});
                     }

@@ -1,5 +1,6 @@
 "use strict";
 let SequelizeLoader = require("./SequelizeLoader");
+let CustomerLogicFactory = require("../service/customer-logic/CustomerLogicFactory");
 
 class InstallerApplication {
     _running = false;
@@ -20,6 +21,7 @@ class InstallerApplication {
      */
     async start() {
         if(this._running) return;
+        this.customerLogic = await CustomerLogicFactory.createAndInitializeCustomerLogicHandler();
         this.sequelize = await this.sequelizeLoader.start({
             sync: this.args.install && !this.args.drop,
             alter: this.args.update,

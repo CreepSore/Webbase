@@ -3,10 +3,10 @@ let path = require("path");
 
 let {Sequelize} = require("sequelize");
 
+let CustomerLogicHandler = require("../service/customer-logic/CustomerLogicHandler");
+
 // Models
 let Version = require("../model/Version");
-let Locale = require("../model/Locale");
-let Translation = require("../model/Translation");
 let User = require("../model/User");
 let Permission = require("../model/Permission");
 let PermissionGroup = require("../model/PermissionGroup");
@@ -49,14 +49,11 @@ class SequelizeLoader {
      */
     async initializeModels() {
         Version.initialize(this.sequelize);
-        Locale.initialize(this.sequelize);
-        Translation.initialize(this.sequelize);
         Permission.initialize(this.sequelize);
         PermissionGroup.initialize(this.sequelize);
         User.initialize(this.sequelize);
 
-        Locale.hasMany(Translation);
-        Translation.belongsTo(Locale);
+        await CustomerLogicHandler.instance.runAllCustomerLogicFunction("sequelizeInitModels", {sequelize: this.sequelize, sequelizeLoader: this});
 
         User.belongsTo(PermissionGroup);
         PermissionGroup.hasMany(User);
@@ -119,6 +116,8 @@ class SequelizeLoader {
                             console.log("INFO", `Running first install initialization for model [${Model.name}]`);
                         }
                     }));
+
+                await CustomerLogicHandler.instance.runAllCustomerLogicFunction("sequelizeOnFirstInstall", {sequelize: this.sequelize, sequelizeLoader: this});
             }
         }
         catch(err) {

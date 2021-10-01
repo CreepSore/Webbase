@@ -4,6 +4,8 @@ let UserCommandHandler = require("../cli/UserCommandHandler.js");
 let PermissionCommandHandler = require("../cli/PermissionCommandHandler.js");
 let LocalizationCommandHandler = require("../cli/LocalizationCommandHandler.js");
 
+let CustomerLogicFactory = require("../service/customer-logic/CustomerLogicFactory");
+
 const mapping = {
     model: ModelCommandHandler,
     user: UserCommandHandler,
@@ -29,6 +31,7 @@ class CliApplication {
      */
     async start() {
         if(this._running) return;
+        this.customerLogic = await CustomerLogicFactory.createAndInitializeCustomerLogicHandler();
 
         const handler = mapping[this.args._[0]];
         if(!handler) {

@@ -1,6 +1,8 @@
 "use strict";
 let express = require("express");
 
+let CustomerLogicHandler = require("../../../service/customer-logic/CustomerLogicHandler");
+
 let User = require("../../../model/User");
 
 module.exports = function() {
@@ -40,17 +42,19 @@ module.exports = function() {
 
     router.post("/api/v1/usermgmt/login", async(req, res) => {
         // @ts-ignore
-        if(await User.isValidUid(req.session.uid))
+        if(await User.isValidUid(req.session.uid)) {
             return res
                 .json({success: false, error: "You are already logged in!", href: "/"})
                 .end();
+        }
 
         const {username, password} = req.body;
 
-        if(!username || !password)
+        if(!username || !password) {
             return res
                 .json({success: false, error: "Please specify a username and a password."})
                 .end();
+        }
 
         let loggedOnUser = await User.doLogin(username, password);
         if(!loggedOnUser) {
@@ -69,6 +73,15 @@ module.exports = function() {
         if(!(await loggedOnUser.hasPermission("LOGIN"))) {
             return res
                 .json({success: false, error: "You do not have the permission to login."})
+                .end();
+        }
+
+        if((await CustomerLogicHandler.instance.runAllCustomerLogicFunction("onLogin", {
+            user: loggedOnUser,
+            expressSession: req.session
+        })).some(result => result === false)) {
+            return res
+                .json({success: false, error: "You are not allowed to login."})
                 .end();
         }
 

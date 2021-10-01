@@ -5,8 +5,10 @@ let ExpressSessionStore = require("express-session").Store;
 let SequelizeStore = require("connect-session-sequelize")(ExpressSessionStore);
 
 let ConfigModel = require("../service/ConfigModel");
+let CustomerLogicFactory = require("../service/customer-logic/CustomerLogicFactory");
 let SequelizeLoader = require("./SequelizeLoader");
 let ExpressLoader = require("./ExpressLoader");
+
 
 class WebApplication {
     _running = false;
@@ -27,8 +29,9 @@ class WebApplication {
      */
     async start() {
         if(this._running) return;
+        this.customerLogic = await CustomerLogicFactory.createAndInitializeCustomerLogicHandler();
         const cfg = await this.loadConfig();
-        this.sequelize = await this.sequelizeLoader.start(cfg.database);
+        this.sequelize = await this.sequelizeLoader.start();
 
         if(!(await this.sequelizeLoader.checkDb())) {
             console.log("CRITICAL", "Database not installed correctly. Please run [npm run install].");

@@ -3,6 +3,7 @@
 let SequelizeLoader = require("../loader/SequelizeLoader");
 let Locale = require("../model/Locale");
 let Translation = require("../model/Translation");
+let LanguageService = require("../service/database-logic/LanguageService");
 
 class LocalizationCommandHandler {
     static getHelp() {
@@ -61,21 +62,20 @@ class LocalizationCommandHandler {
         }
         catch {
             console.log("WARN", "Locale already exists. Only creating missing translations ...");
-            localeObj = await Locale.getByIdentifier(localeId);
         }
 
-        await localeObj.createMissingTranslations();
+        await LanguageService.createMissingTranslations(localeId);
 
         console.log("INFO", `Language ${name} with localeId ${localeId} added.`);
     }
 
     static async setTranslation(localeId, key, value) {
-        Translation.setTranslation(localeId, key, value);
+        LanguageService.setTranslation(localeId, key, value);
         console.log("INFO", `Translation [${key}] set to [${value}] for locale ${localeId}.`);
     }
 
     static async getTranslation(localeId, key) {
-        let translation = await Translation.getTranslation(key, localeId);
+        let translation = await LanguageService.getTranslation(key, localeId);
         console.log("INFO", `Translation [${key}] for locale [${localeId}]: ${translation}`);
     }
 
