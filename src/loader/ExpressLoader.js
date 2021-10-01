@@ -19,7 +19,7 @@ class ExpressLoader {
         this.app.set("views", path.resolve(__dirname, "..", "web", "view"));
     }
 
-    async initializeMiddleware() {
+    async initializeMiddleware(sessionStore) {
         this.app.use(helmet({
             contentSecurityPolicy: false
         }));
@@ -67,7 +67,7 @@ class ExpressLoader {
         this.app = express();
 
         await this.setConfig();
-        await this.initializeMiddleware();
+        await this.initializeMiddleware(sessionStore);
         await this.initializeUserexit();
 
         this.server = this.app.listen(this.cfg.port, this.cfg.hostname);

@@ -10,15 +10,14 @@ let Translation = require("../model/Translation");
 let User = require("../model/User");
 let Permission = require("../model/Permission");
 let PermissionGroup = require("../model/PermissionGroup");
-const { timingSafeEqual } = require("crypto");
 
 /**
  * @typedef {Object} SyncActions
- * @property {boolean=} drop
- * @property {Array<import("sequelize").Model | any>=} dropFilter
- * @property {boolean=} alter
- * @property {boolean=} sync
- * @property {boolean=} log
+ * @property {boolean=} drop drops the database
+ * @property {Array<import("sequelize").Model | any>=} dropFilter filters the models to drop
+ * @property {boolean=} alter alters the database instead of syncing (sync has to be specified too)
+ * @property {boolean=} sync synchronizes the database
+ * @property {boolean=} log enables sequelize logging
  */
 
 class SequelizeLoader {
