@@ -1,4 +1,6 @@
 "use strict";
+let path = require("path");
+let fs = require("fs");
 
 let SequelizeLoader = require("../loader/SequelizeLoader");
 let Locale = require("../model/Locale");
@@ -14,7 +16,7 @@ class LocalizationCommandHandler {
   loc locales
   loc translations <localeId>
   loc export <file> [localeId]
-  loc import <file>
+  loc import <file> [overrideExisting=false]
 `;
     }
 
@@ -44,6 +46,14 @@ class LocalizationCommandHandler {
                 if(!args[1]) return false;
                 await this.runListTranslationsCommand(args[1]);
             }
+            else if(args[0] === "export") {
+                if(!args[1]) return false;
+                await this.runExportCommand(args[1], args[2]);
+            }
+            else if(args[0] === "import") {
+                if(!args[1]) return false;
+                await this.runImportCommand(args[1], args[2] === "true");
+            }
             return true;
         })());
 
@@ -53,9 +63,8 @@ class LocalizationCommandHandler {
     }
 
     static async addLanguage(name, localeId) {
-        let localeObj;
         try {
-            localeObj = await Locale.create({
+            await Locale.create({
                 identifier: localeId,
                 name
             });
@@ -112,12 +121,92 @@ ${translationList}`);
 
     // @ts-ignore
     static async runExportCommand(file, localeId) {
-        // TODO export translations
+        let resolvedPath = path.resolve(file);
+        if(fs.existsSync(resolvedPath)) {
+            console.log("ERROR", `Failed to export: File already exists at [${resolvedPath}]`);
+            return;
+        }
+
+        let where = {};
+        if(localeId) {
+            where = {
+                identifier: localeId
+            };
+        }
+
+        let translations = await Translation.findAll({
+            include: [{
+                model: Locale,
+                where
+            }],
+            order: [
+                [Locale, "identifier", "ASC"],
+                ["translationKey", "ASC"]
+            ]
+        });
+
+        const header = "Locale.identifier\tTranslation.translationKey\tTranslation.value";
+        // @ts-ignore
+        const lines = translations.map(t => `${t.Locale.identifier}\t${t.translationKey}\t${t.value}`);
+        const content = [header, ...lines].join("\n");
+        fs.writeFileSync(resolvedPath, content, "utf8");
+        console.log("INFO", `Translations exported to [${resolvedPath}]`);
     }
 
     // @ts-ignore
-    static async runImportCommand(file) {
-        // TODO: import translations
+    static async runImportCommand(file, overrideExisting) {
+        let resolvedPath = path.resolve(file);
+        if(!fs.existsSync(resolvedPath)) {
+            console.log("ERROR", `Failed to import: File does not exists at [${resolvedPath}]`);
+            return;
+        }
+
+        let content = fs.readFileSync(resolvedPath, "utf8");
+        let lines = content.split("\n");
+        let header = lines.shift();
+        let headerParts = header.split("\t");
+        if(headerParts.length !== 3) {
+            console.log("ERROR", `Failed to import: Invalid header [${header}]`);
+            return;
+        }
+
+        let indexLocale = headerParts.indexOf("Locale.identifier");
+        let indexTranslationKey = headerParts.indexOf("Translation.translationKey");
+        let indexValue = headerParts.indexOf("Translation.value");
+
+        await Promise.all(lines.map(async(line) => {
+            let parts = line.split("\t");
+            if(parts.length !== 3) {
+                console.log("ERROR", `Failed to import: Invalid line [${line}]`);
+                return false;
+            }
+
+            let locale = parts[indexLocale];
+            let translationKey = parts[indexTranslationKey];
+            let value = parts[indexValue];
+
+            if(!overrideExisting) {
+                let existingTranslation = await Translation.findOne({
+                    where: {
+                        translationKey
+                    },
+                    include: [{
+                        model: Locale,
+                        where: {
+                            identifier: locale
+                        }
+                    }]
+                });
+
+                if(existingTranslation) {
+                    console.log("WARN", `Translation [${translationKey}]@[${locale}] already exists. Skipping ...`);
+                    return false;
+                }
+            }
+
+            console.log("INFO", `Translation [${translationKey}]@[${locale}] set to [${value}]`);
+            return await LanguageService.setTranslation(locale, translationKey, value);
+        }));
     }
 }
 
