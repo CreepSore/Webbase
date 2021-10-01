@@ -6,6 +6,16 @@ class ModelCommandHandler {
     static async execute(args) {
         let sequelizeLoader = new SequelizeLoader();
         let sequelize = await sequelizeLoader.start();
+
+        if(args.length === 1 && args[0] === "list") {
+            let models = Object.keys(sequelize.models)
+                .map(model => `  - ${model}`)
+                .join("\n");
+            console.log("INFO", `Installed Models:
+${models}`);
+            return;
+        }
+
         let Model = sequelize.models[args[0]];
         if(!Model && args[0]) {
             console.log("ERROR", `Invalid model [${args[0]}] specified.`);
@@ -14,6 +24,7 @@ class ModelCommandHandler {
 
         if(!args[0] || !args[1] || args[1] === "help") {
             console.log("INFO", `Usage ModelCommandHandler:
+  model list
   model <model> metadata
   model <model> get
   model <model> getByPk <pk>

@@ -148,7 +148,7 @@ ${translationList}`);
         const header = "Locale.identifier\tTranslation.translationKey\tTranslation.value";
         // @ts-ignore
         const lines = translations.map(t => `${t.Locale.identifier}\t${t.translationKey}\t${t.value}`);
-        const content = [header, ...lines].join("\n");
+        const content = [header, ...lines, "\n"].join("\n");
         fs.writeFileSync(resolvedPath, content, "utf8");
         console.log("INFO", `Translations exported to [${resolvedPath}]`);
     }
@@ -175,6 +175,7 @@ ${translationList}`);
         let indexValue = headerParts.indexOf("Translation.value");
 
         await Promise.all(lines.map(async(line) => {
+            if(!line) return false;
             let parts = line.split("\t");
             if(parts.length !== 3) {
                 console.log("ERROR", `Failed to import: Invalid line [${line}]`);
