@@ -18,6 +18,7 @@ let PermissionGroup = require("../model/PermissionGroup");
  * @property {boolean=} alter alters the database instead of syncing (sync has to be specified too)
  * @property {boolean=} sync synchronizes the database
  * @property {boolean=} log enables sequelize logging
+ * @property {boolean=} logInstalledVersions logs the installed versions
  */
 
 class SequelizeLoader {
@@ -131,6 +132,7 @@ class SequelizeLoader {
      * @returns {Promise<Sequelize>}
      */
     async start(syncActions = {}) {
+        console.log("INFO", "Initializing sequelize ...");
         this.sequelize = new Sequelize({
             dialect: "sqlite",
             storage: path.resolve(__dirname, "..", "..", "storage.db"),
@@ -148,8 +150,9 @@ class SequelizeLoader {
             console.log("ERROR", "Calling syncActions.alter without specifying syncActions.sync");
         }
 
-        if(!syncActions.drop || syncActions.sync) await SequelizeLoader.printComponentVersions();
+        if(syncActions.logInstalledVersions && (!syncActions.drop || syncActions.sync)) await SequelizeLoader.printComponentVersions();
 
+        console.log("INFO", "");
         return this.sequelize;
     }
 

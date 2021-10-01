@@ -105,6 +105,7 @@ class ExpressLoader {
      * @returns {Promise<express.Application>}
      */
     async start(webConfig, sessionStore = null) {
+        console.log("INFO", "Initializing express ...");
         this.cfg = webConfig;
         this.app = express();
 
@@ -114,6 +115,7 @@ class ExpressLoader {
 
         this.server = this.app.listen(this.cfg.port, this.cfg.hostname);
 
+        console.log("INFO", "");
         return this.app;
     }
 

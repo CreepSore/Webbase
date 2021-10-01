@@ -167,7 +167,7 @@ where and data are JSON strings. Remember to put them in apastrophes.`);
         });
 
         // @ts-ignore
-        console.log("INFO", `Created user with id ${user.id}.`);
+        console.log("INFO", `Created user with id ${user.id}`);
 
         let defaultGroup = await PermissionGroup.findOne({where: {name: "DEFAULT"}});
         if(defaultGroup) {

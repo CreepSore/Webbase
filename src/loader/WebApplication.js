@@ -31,7 +31,7 @@ class WebApplication {
         if(this._running) return;
         this.customerLogic = await CustomerLogicFactory.createAndInitializeCustomerLogicHandler();
         const cfg = await this.loadConfig();
-        this.sequelize = await this.sequelizeLoader.start();
+        this.sequelize = await this.sequelizeLoader.start({logInstalledVersions: true});
 
         if(!(await this.sequelizeLoader.checkDb())) {
             console.log("CRITICAL", "Database not installed correctly. Please run [npm run install].");

@@ -84,7 +84,7 @@ class CustomLoginLogic extends CustomerLogic {
                  */
                 handler: async(req, res) => {
                     const {locale, key} = req.params;
-                    const translatedText = await LanguageService.getTranslation(key, locale, req.body || {});
+                    const translatedText = await LanguageService.getTranslation(key, locale, req.body || {}, true);
 
                     res.json({success: true, data: translatedText});
                 }
@@ -94,34 +94,8 @@ class CustomLoginLogic extends CustomerLogic {
                 relativePath: "/Translation/setTranslation/:locale/:key",
                 handler: async(req, res) => {
                     const {locale, key} = req.params;
-                    let translation = await Translation.findOne({
-                        where: {
-                            translationKey: key
-                        },
-                        include: [{
-                            model: Locale,
-                            where: {
-                                identifier: locale
-                            }
-                        }]
-                    });
 
-                    if(!translation) {
-                        let localeObj = await LanguageService.getLocaleByIdentifier(locale);
-                        if(!localeObj) {
-                            return res.json({success: false, error: "INVALID_LOCALE"});
-                        }
-
-                        // @ts-ignore
-                        translation = await localeObj.createTranslation({
-                            translationKey: key,
-                            value: req.body.value
-                        });
-                    }
-
-                    await translation.update({
-                        value: req.body.value
-                    });
+                    LanguageService.setTranslation(locale, key, req.body.value);
 
                     res.json({success: true});
                 }
