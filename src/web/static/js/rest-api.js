@@ -110,6 +110,15 @@
         });
     }
 
+    static customUrl(url, method, data = {}) {
+        return new Promise(res => {
+            $[method.toLowerCase()](`/api/v1/custom${url}`, data)
+                .done((data, status, xhr) => {
+                    res(data);
+                }).catch(this.errorHandler);
+        });
+    }
+
     static async getSessionParameter(param) {
         return new Promise(res => {
             $.get(`/api/v1/usermgmt/getSessionParameter/${param}`)
@@ -143,15 +152,15 @@
     }
 
     static async getAllTranslations() {
-        return await this.modelCustomUrl("Translation", `/getAll`, "GET");
+        return await this.customUrl(`/Translation/getAll`, "GET");
     }
 
     static async getTranslation(locale, key, replaceKeys = {}) {
-        return await this.modelCustomUrl("Translation", `/getTranslation/${locale}/${key}`, "POST", replaceKeys);
+        return await this.customUrl(`/Translation/getTranslation/${locale}/${key}`, "POST", replaceKeys);
     }
 
     static async setTranslation(locale, key, value) {
-        return await this.modelCustomUrl("Translation", `/setTranslation/${locale}/${key}`, "POST", {value});
+        return await this.customUrl(`/Translation/setTranslation/${locale}/${key}`, "POST", {value});
     }
 }
 
