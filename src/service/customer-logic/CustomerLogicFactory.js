@@ -44,14 +44,3 @@ class CustomerLogicFactory {
 }
 
 module.exports = CustomerLogicFactory;
-
-/**
-try {
-    let LogicConstructor = require(path.join(resolvedLogicPath, file));
-    let logicInstance = new LogicConstructor();
-    await handler.registerCustomerLogic(logicInstance, false);
-}
-catch(error) {
-    console.log("ERROR", error);
-}
- */
