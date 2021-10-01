@@ -44,19 +44,13 @@ class Version extends Model {
         });
     }
 
-    static async afterSync() {
-        let schemaInfo = await Version.findOne({where: {component: "SCHEMA"}, raw: true});
-
-        if(!schemaInfo) {
-            schemaInfo = await Version.create({
-                component: "SCHEMA",
-                version: require(path.join(__dirname, "..", "..", "package.json")).version || "INVALID"
-            }, {
-                raw: true
-            });
-        }
-
-        console.log("INFO", `Schema information: ${JSON.stringify(schemaInfo, null, 2)}`);
+    static async onFirstInstall() {
+        await Version.create({
+            component: "SCHEMA",
+            version: require(path.join(__dirname, "..", "..", "package.json")).version || "INVALID"
+        }, {
+            raw: true
+        });
     }
 }
 

@@ -47,7 +47,7 @@ class CustomLoginLogic extends CustomerLogic {
     async sequelizeOnFirstInstall() {
         await Version.create({
             component: "LOCALIZATION",
-            version: require(path.join(__dirname, "..", "..", "package.json")).version || "INVALID"
+            version: require(path.join(__dirname, "..", "..", "..", "package.json")).version || "INVALID"
         });
     }
 

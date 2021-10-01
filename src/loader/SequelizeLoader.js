@@ -124,8 +124,6 @@ class SequelizeLoader {
             console.log("CRITICAL", `Failed to sync database properly: ${JSON.stringify(err, null, 2)}; ${err}`);
             process.exit(1);
         }
-
-        await Version.afterSync();
     }
 
     /**
@@ -150,11 +148,19 @@ class SequelizeLoader {
             console.log("ERROR", "Calling syncActions.alter without specifying syncActions.sync");
         }
 
+        if(!syncActions.drop || syncActions.sync) await SequelizeLoader.printComponentVersions();
+
         return this.sequelize;
     }
 
     async stop() {
         await this.sequelize.close();
+    }
+
+    static async printComponentVersions() {
+        let versions = await Version.findAll();
+        let versionText = versions.map(version => JSON.stringify(version, null, 2)).join(", ");
+        console.log("INFO", `Schema information: ${versionText}`);
     }
 }
 
