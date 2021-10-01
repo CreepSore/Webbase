@@ -9,6 +9,34 @@ let Permission = require("./Permission");
 let PermissionGroup = require("./PermissionGroup");
 
 class User extends Model {
+    static initialize(sequelize) {
+        this.init({
+            id: {
+                type: DataTypes.UUID,
+                defaultValue: () => uuid.v4(),
+                primaryKey: true
+            },
+            username: {
+                type: DataTypes.STRING(64),
+                allowNull: false
+            },
+            email: {
+                type: DataTypes.STRING(255),
+                allowNull: true
+            },
+            password: {               type: DataTypes.STRING(255),
+                allowNull: false
+            },
+            active: {
+                type: DataTypes.BOOLEAN,
+                allowNull: false,
+                defaultValue: false
+            }
+        }, {
+            sequelize
+        });
+    }
+
     static get priority() {
         return 3;
     }
@@ -69,34 +97,6 @@ class User extends Model {
             .update(password)
             .digest()
             .toString("base64");
-    }
-
-    static initialize(sequelize) {
-        this.init({
-            id: {
-                type: DataTypes.UUID,
-                defaultValue: () => uuid.v4(),
-                primaryKey: true
-            },
-            username: {
-                type: DataTypes.STRING(64),
-                allowNull: false
-            },
-            email: {
-                type: DataTypes.STRING(255),
-                allowNull: true
-            },
-            password: {               type: DataTypes.STRING(255),
-                allowNull: false
-            },
-            active: {
-                type: DataTypes.BOOLEAN,
-                allowNull: false,
-                defaultValue: false
-            }
-        }, {
-            sequelize
-        });
     }
 }
 

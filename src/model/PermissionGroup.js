@@ -6,18 +6,6 @@ let uuid = require("uuid");
 let Permission = require("./Permission");
 
 class PermissionGroup extends Model {
-    static get priority() {
-        return 2;
-    }
-
-    static async getPermission(name) {
-        return await this.findOne({
-            where: {
-                name
-            }
-        });
-    }
-
     static initialize(sequelize) {
         this.init({
             id: {
@@ -37,6 +25,18 @@ class PermissionGroup extends Model {
             }
         }, {
             sequelize
+        });
+    }
+
+    static get priority() {
+        return 2;
+    }
+
+    static async getPermission(name) {
+        return await this.findOne({
+            where: {
+                name
+            }
         });
     }
 

@@ -2,11 +2,13 @@
 let ModelCommandHandler = require("../cli/ModelCommandHandler.js");
 let UserCommandHandler = require("../cli/UserCommandHandler.js");
 let PermissionCommandHandler = require("../cli/PermissionCommandHandler.js");
+let LocalizationCommandHandler = require("../cli/LocalizationCommandHandler.js");
 
 const mapping = {
     model: ModelCommandHandler,
     user: UserCommandHandler,
-    perm: PermissionCommandHandler
+    perm: PermissionCommandHandler,
+    loc: LocalizationCommandHandler
 };
 
 class CliApplication {

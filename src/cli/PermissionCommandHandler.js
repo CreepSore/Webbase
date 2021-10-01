@@ -69,12 +69,15 @@ class PermissionCommandHandler {
             name,
             description
         });
+        console.log("INFO", `New Permission Group [${name}] created.`);
     }
 
     static async removePermissionGroup(name) {
         await PermissionGroup.destroy({
             where: {name}
         });
+
+        console.log("INFO", `Permission Group [${name}] deleted.`);
     }
 
     static async listPermissionGroup() {
