@@ -14,16 +14,16 @@ let LanguageService = require("../../service/database-logic/LanguageService");
  * @typedef {import("../../service/customer-logic/types").SequelizeInitializationParams} SequelizeInitializationParams
  */
 
-class CustomLoginLogic extends CustomerLogic {
+class CustomLocaleLogic extends CustomerLogic {
     /**
      * Gets executed before express initializes the routes.
      * @param {ExpressInitializationParams} expressInitializationParams
      * @return {Promise<void>}
-     * @memberof CustomLoginLogic
+     * @memberof CustomLocaleLogic
      */
     async expressInitRoutesPre(expressInitializationParams) {
         let {app} = expressInitializationParams;
-        ExpressLoader.configureCustomRoutes(app, CustomLoginLogic.getTranslationCustomExpressRoutes());
+        ExpressLoader.configureCustomRoutes(app, CustomLocaleLogic.getTranslationCustomExpressRoutes());
     }
 
     /**
@@ -54,7 +54,7 @@ class CustomLoginLogic extends CustomerLogic {
     /**
      * @static
      * @return {import("../../loader/ExpressLoader").CustomRoute[]}
-     * @memberof CustomLoginLogic
+     * @memberof CustomLocaleLogic
      */
     static getTranslationCustomExpressRoutes() {
         return [
@@ -104,4 +104,4 @@ class CustomLoginLogic extends CustomerLogic {
     }
 }
 
-module.exports = CustomLoginLogic;
+module.exports = CustomLocaleLogic;
