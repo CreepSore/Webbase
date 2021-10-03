@@ -6,6 +6,7 @@
  * @typedef {import("./types").OnLoginCallbackParams} OnLoginCallbackParams
  * @typedef {import("./types").ExpressInitializationParams} ExpressInitializationParams
  * @typedef {import("./types").SequelizeInitializationParams} SequelizeInitializationParams
+ * @typedef {import("./types").WebpackGetConfigParams} WebpackGetConfigParams
  */
 
 class CustomerLogic {
@@ -67,6 +68,14 @@ class CustomerLogic {
      * @memberof CustomerLogic
      */
     async sequelizeOnFirstInstall(sequelizeInitializationParams) {}
+
+    /**
+     * Gets executed when sequelize is initializing the models
+     * @param {WebpackGetConfigParams} webpackGetConfigParams
+     * @returns {Promise<object>}
+     * @memberof CustomerLogic
+     */
+    async getWebpackConfig(webpackGetConfigParams) {}
 
     getPriority() {return 0;}
     async onLoad() {}

@@ -1,6 +1,8 @@
+"use strict";
+/* eslint-disable */
 let React = require("react");
 
-let RestApi = require("../rest-api.js");
+let RestApi = require("../../../web/static/js/rest-api.js");
 
 class TranslationEditor extends React.Component {
     constructor(props) {

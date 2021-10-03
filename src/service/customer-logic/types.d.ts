@@ -19,9 +19,18 @@ export type OnLoginCallbackParams = {
 export type ExpressInitializationParams = {
     app: express.Application,
     expressLoader: ExpressLoader
-}
+};
 
 export type SequelizeInitializationParams = {
     sequelize: sequelize.Sequelize,
     sequelizeLoader: SequelizeLoader
-}
+};
+
+export type WebpackGetConfigParams = {
+    paths: {
+        staticPath: string,
+        pagesPath: string,
+        compiledPath: string,
+        pluginPath: string
+    }
+};

@@ -29,6 +29,34 @@ class CustomerLogicHandler {
     }
 
     /**
+     * Returns all customer implementations sorted by highest
+     * priority first
+     * @readonly
+     * @memberof CustomerLogicHandler
+     */
+    get sortedCustomerLogic() {
+        return [...this.customerLogicImplementations].sort((a, b) => {
+            if(a.getPriority() > b.getPriority()) return -1;
+            if(a.getPriority() < b.getPriority()) return 1;
+            return 0;
+        });
+    }
+
+    /**
+     * Returns all customer implementations sorted by lowest
+     * priority first
+     * @readonly
+     * @memberof CustomerLogicHandler
+     */
+    get sortedCustomerLogicReversed() {
+        return [...this.customerLogicImplementations].sort((a, b) => {
+            if(a.getPriority() > b.getPriority()) return 1;
+            if(a.getPriority() < b.getPriority()) return -1;
+            return 0;
+        });
+    }
+
+    /**
      * @return {Promise<CustomerLogicDependencies>}
      * @memberof CustomerLogicHandler
      */
@@ -71,15 +99,9 @@ class CustomerLogicHandler {
      * @memberof CustomerLogicHandler
      */
     async loadAllCustomerImplementations() {
-        await Promise.all([...this.customerLogicImplementations]
-            .sort((a, b) => {
-                if(a.getPriority() > b.getPriority()) return -1;
-                if(a.getPriority() < b.getPriority()) return 1;
-                return 0;
-            })
-            .map(customerLogic => {
-                return this.loadCustomerLogic(customerLogic);
-            }));
+        await Promise.all(this.sortedCustomerLogic.map(customerLogic => {
+            return this.loadCustomerLogic(customerLogic);
+        }));
     }
 
     /**
@@ -89,15 +111,9 @@ class CustomerLogicHandler {
      * @memberof CustomerLogicHandler
      */
     async unloadAllCustomerImplementations(clearList = false) {
-        await Promise.all([...this.customerLogicImplementations]
-            .sort((a, b) => {
-                if(a.getPriority() > b.getPriority()) return 1;
-                if(a.getPriority() < b.getPriority()) return -1;
-                return 0;
-            })
-            .map(customerLogic => {
-                return this.unloadCustomerLogic(customerLogic);
-            }));
+        await Promise.all(this.sortedCustomerLogicReversed.map(customerLogic => {
+            return this.unloadCustomerLogic(customerLogic);
+        }));
 
         if(clearList) {
             this.customerLogicImplementations.clear();
@@ -113,11 +129,7 @@ class CustomerLogicHandler {
      * @memberof CustomerLogicHandler
      */
     async runAllCustomerLogicFunction(functionName, ...args) {
-        return (await Promise.all([...this.customerLogicImplementations].sort((a, b) => {
-            if(a.getPriority() > b.getPriority()) return -1;
-            if(a.getPriority() < b.getPriority()) return 1;
-            return 0;
-        }).map(async customerLogic => {
+        return (await Promise.all(this.sortedCustomerLogic.map(async customerLogic => {
             return await this.runCustomerLogicFunction(customerLogic, functionName, ...args);
         }))).filter(x => x !== this.nullobj);
     }

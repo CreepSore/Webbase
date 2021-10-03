@@ -12,6 +12,7 @@ let LanguageService = require("../../service/database-logic/LanguageService");
 /**
  * @typedef {import("../../service/customer-logic/types").ExpressInitializationParams} ExpressInitializationParams
  * @typedef {import("../../service/customer-logic/types").SequelizeInitializationParams} SequelizeInitializationParams
+ * @typedef {import("../../service/customer-logic/types").WebpackGetConfigParams} WebpackGetConfigParams
  */
 
 class CustomLocaleLogic extends CustomerLogic {
@@ -49,6 +50,20 @@ class CustomLocaleLogic extends CustomerLogic {
             component: "LOCALIZATION",
             version: require(path.join(__dirname, "..", "..", "..", "package.json")).version || "INVALID"
         });
+    }
+
+    /**
+     * Gets executed when sequelize is initializing the models
+     * @param {WebpackGetConfigParams} params
+     * @returns {Promise<object>}
+     * @memberof CustomerLogic
+     */
+    async getWebpackConfig(params) {
+        return {
+            entry: {
+                translationEditor: path.resolve(params.paths.pluginPath, "CustomLocaleLogic", "js", "translation-editor.jsx")
+            }
+        };
     }
 
     /**
