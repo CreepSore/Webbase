@@ -2,6 +2,7 @@
 config.json
 config.template.json
 storage.db
+src/web/static/js/compiled/
 
 # they're inside the sources anyway??
 *.LICENSE.txt
