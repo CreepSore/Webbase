@@ -29,7 +29,7 @@ class WebApplication {
      */
     async start() {
         if(this._running) return;
-        this.customerLogic = await CustomerLogicFactory.createAndInitializeCustomerLogicHandler();
+        this.customerLogic = await CustomerLogicFactory.createAndInitializeCustomerLogicHandler(true);
         const cfg = await this.loadConfig();
         this.sequelize = await this.sequelizeLoader.start({logInstalledVersions: true});
 

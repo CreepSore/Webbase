@@ -31,7 +31,7 @@ class CliApplication {
      */
     async start() {
         if(this._running) return;
-        this.customerLogic = await CustomerLogicFactory.createAndInitializeCustomerLogicHandler();
+        this.customerLogic = await CustomerLogicFactory.createAndInitializeCustomerLogicHandler(false);
 
         const handler = mapping[this.args._[0]];
         if(!handler) {

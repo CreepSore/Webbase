@@ -21,7 +21,7 @@ class InstallerApplication {
      */
     async start() {
         if(this._running) return;
-        this.customerLogic = await CustomerLogicFactory.createAndInitializeCustomerLogicHandler();
+        this.customerLogic = await CustomerLogicFactory.createAndInitializeCustomerLogicHandler(false);
         this.sequelize = await this.sequelizeLoader.start({
             sync: this.args.install && !this.args.drop,
             alter: this.args.update,
