@@ -47,6 +47,7 @@ class CliApplication {
         }
 
         await handler.execute(this.args._.slice(1));
+        await this.customerLogic.unloadAllCustomerImplementations();
 
         this._running = false;
     }

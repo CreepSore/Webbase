@@ -28,6 +28,7 @@ class InstallerApplication {
             drop: this.args.drop,
             log: this.args.log
         });
+        await this.customerLogic.unloadAllCustomerImplementations();
         this._running = true;
     }
 

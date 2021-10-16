@@ -61,6 +61,7 @@ class WebApplication {
             this.sessionStore.stopExpiringSessions();
             await this.expressLoader.stop();
             await this.sequelizeLoader.stop();
+            await this.customerLogic.unloadAllCustomerImplementations();
         }
         catch(err) {
             console.log("CRITICAL", `Failed to safely stop all modules [${err.message}]. Forcing stop ...`);
