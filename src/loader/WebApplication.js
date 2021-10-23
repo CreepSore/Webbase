@@ -29,7 +29,7 @@ class WebApplication {
      */
     async start() {
         if(this._running) return;
-        this.customerLogic = await CustomerLogicFactory.createAndInitializeCustomerLogicHandler();
+        this.customerLogic = await CustomerLogicFactory.createAndInitializeCustomerLogicHandler(true);
         const cfg = await this.loadConfig();
         this.sequelize = await this.sequelizeLoader.start({logInstalledVersions: true});
 
@@ -61,6 +61,7 @@ class WebApplication {
             this.sessionStore.stopExpiringSessions();
             await this.expressLoader.stop();
             await this.sequelizeLoader.stop();
+            await this.customerLogic.unloadAllCustomerImplementations();
         }
         catch(err) {
             console.log("CRITICAL", `Failed to safely stop all modules [${err.message}]. Forcing stop ...`);

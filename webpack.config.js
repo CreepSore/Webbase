@@ -45,7 +45,7 @@ const getDefaultConfig = function() {
 
 module.exports = async() => {
     let config = getDefaultConfig();
-    let customerLogicHandler = await CustomerLogicFactory.createAndInitializeCustomerLogicHandler();
+    let customerLogicHandler = await CustomerLogicFactory.createAndInitializeCustomerLogicHandler(false);
 
     for(let customerLogic of customerLogicHandler.sortedCustomerLogic) {
         let result = await customerLogicHandler.runCustomerLogicFunction(customerLogic, "getWebpackConfig", {paths: defaultPaths});

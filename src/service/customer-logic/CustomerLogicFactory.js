@@ -5,7 +5,7 @@ let path = require("path");
 let CustomerLogicHandler = require("./CustomerLogicHandler");
 
 class CustomerLogicFactory {
-    static async createAndInitializeCustomerLogicHandler() {
+    static async createAndInitializeCustomerLogicHandler(autoLoad = true) {
         let handler = new CustomerLogicHandler();
         let resolvedLogicPath = CustomerLogicFactory.getCustomerLogicPath();
 
@@ -32,7 +32,7 @@ class CustomerLogicFactory {
 
         await Promise.all(toAwait);
 
-        await handler.loadAllCustomerImplementations();
+        autoLoad && await handler.loadAllCustomerImplementations();
         return handler;
     }
 
