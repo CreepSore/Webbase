@@ -27,6 +27,7 @@
     "express-session": "^1.17.2",
     "express-ws": "^5.0.2",
     "helmet": "^4.6.0",
+    "jssha": "^3.2.0",
     "minimist": "^1.2.5",
     "node-cron": "^3.0.0",
     "nodemailer": "^6.7.0",
