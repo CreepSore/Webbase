@@ -51,7 +51,10 @@ module.exports = async() => {
         let result = await customerLogicHandler.runCustomerLogicFunction(customerLogic, "getWebpackConfig", {paths: defaultPaths});
         if(!result) continue;
 
-        config = await Object.assign(config, result);
+        // TODO: Add all of the other properties / Make a better merge engine
+        Object.keys(result.entry || {}).forEach(key => {
+            config.entry[key] = result.entry[key];
+        });
     }
 
     return config;
