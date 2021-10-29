@@ -17,7 +17,8 @@ class LoginForm extends React.Component {
             input: {
 
             },
-            t: {}
+            t: {},
+            tfaVisible: false
         };
     }
 
@@ -39,7 +40,8 @@ class LoginForm extends React.Component {
                         btnLogin: 'LOGIN::BTN::LOGIN',
                         btnRegister: 'LOGIN::BTN::REGISTER',
                         placeholderUsername: 'LOGIN::PLACEHOLDER::USERNAME',
-                        placeholderPassword: 'LOGIN::PLACEHOLDER::PASSWORD'
+                        placeholderPassword: 'LOGIN::PLACEHOLDER::PASSWORD',
+                        placeholderTFA: "LOGIN::PLACEHOLDER::TFA"
                     }}
                     afterUpdate={(t) => {this.setState({t});}} />
                 <div className="container d-flex justify-content-center align-items-center h-100">
@@ -48,7 +50,8 @@ class LoginForm extends React.Component {
                             <h2>{this.state.t.header}</h2>
                         </div>
                         <div className="card-body">
-                            <input type="text"
+                            <input
+                                type="text"
                                 className="form-control mb-1"
                                 placeholder={this.state.t.placeholderUsername}
                                 id="username"
@@ -56,13 +59,24 @@ class LoginForm extends React.Component {
                                 name="username"
                                 onChange={this.updateInputValue} />
 
-                            <input type="password"
+                            <input
+                                type="password"
                                 className="form-control mb-2"
                                 placeholder={this.state.t.placeholderPassword}
                                 id="password"
                                 aria-autocomplete="none"
                                 name="password"
                                 onChange={this.updateInputValue} />
+
+                            <input
+                                type="text"
+                                className="form-control mb-2"
+                                placeholder={this.state.t.placeholderTFA}
+                                id="tfaCode"
+                                aria-autocomplete="none"
+                                name="tfaCode"
+                                onChange={this.updateInputValue}
+                                hidden={!this.state.tfaVisible}/>
 
                             <button type="submit"
                                 className={`btn form-control btn-${this.state.alert.type || 'primary'}`}
@@ -114,14 +128,18 @@ class LoginForm extends React.Component {
 
     doLogin = async() => {
         // @ts-ignore
-        const {username, password} = this.state.input;
+        const {username, password, tfaCode} = this.state.input;
 
         try {
             // @ts-ignore
-            const result = await RestApi.login(username, password);
+            const result = await RestApi.login(username, password, String(tfaCode).replaceAll(/ /g, ""));
             let type = "success";
             if(result.error) type = "danger";
             this.addNotification("Info", result.message || result.error, type);
+
+            this.setState({
+                tfaVisible: result.tfaRequested
+            });
         }
         catch(err) {
             console.log("k");

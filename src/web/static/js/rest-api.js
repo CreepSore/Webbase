@@ -8,11 +8,12 @@
         return {success: false, error};
     }
 
-    static login(username, password) {
+    static login(username, password, tfaCode = null) {
         return new Promise(res => {
             $.post("/api/v1/usermgmt/login", {
                 username,
-                password
+                password,
+                tfaCode
             }).done((data, status, xhr) => {
                 if(data.href) {
                     location.href = data.href;
