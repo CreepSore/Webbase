@@ -31,6 +31,11 @@ class User extends Model {
                 type: DataTypes.BOOLEAN,
                 allowNull: false,
                 defaultValue: false
+            },
+            tfaKey: {
+                type: DataTypes.STRING(255),
+                allowNull: true,
+                defaultValue: null
             }
         }, {
             sequelize
@@ -69,12 +74,13 @@ class User extends Model {
         let newGroup = await PermissionGroup.findOne({where: {name: group}});
         if(!newGroup) {
             console.log("ERROR", `Group with name ${group} does not exist.`);
-            return;
+            return false;
         }
 
         // @ts-ignore
         await this.setPermissionGroup(newGroup);
         await this.save();
+        return true;
     }
 
     static async isValidUid(uid) {

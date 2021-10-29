@@ -2,6 +2,7 @@
 let express = require("express");
 
 let CustomerLogicHandler = require("../../../service/customer-logic/CustomerLogicHandler");
+let TfaService = require("../../../service/TfaService");
 
 let User = require("../../../model/User");
 
@@ -44,36 +45,38 @@ module.exports = function() {
         // @ts-ignore
         if(await User.isValidUid(req.session.uid)) {
             return res
-                .json({success: false, error: "You are already logged in!", href: "/"})
-                .end();
+                .json({success: false, error: "You are already logged in!", href: "/"});
         }
 
-        const {username, password} = req.body;
+        const {username, password, tfaCode} = req.body;
 
         if(!username || !password) {
             return res
-                .json({success: false, error: "Please specify a username and a password."})
-                .end();
+                .json({success: false, error: "Please specify a username and a password."});
         }
 
         let loggedOnUser = await User.doLogin(username, password);
         if(!loggedOnUser) {
             return res
-                .json({success: false, error: "Invalid username or password"})
-                .end();
+                .json({success: false, error: "Invalid username or password"});
         }
 
         // @ts-ignore
         if(!loggedOnUser.active) {
             return res
-                .json({success: false, error: "Please contact the admininstrator to activate your account."})
-                .end();
+                .json({success: false, error: "Please contact the admininstrator to activate your account."});
+        }
+
+        // @ts-ignore
+        if(loggedOnUser.tfaKey) {
+            if(!tfaCode) return res.json({success: false, error: "Please specify the TFA Code.", tfaRequested: true});
+            // @ts-ignore
+            if(!TfaService.verify(loggedOnUser.tfaKey, tfaCode)) return res.json({success: false, error: "Invalid TFA Code specified.", tfaRequested: true});
         }
 
         if(!(await loggedOnUser.hasPermission("LOGIN"))) {
             return res
-                .json({success: false, error: "You do not have the permission to login."})
-                .end();
+                .json({success: false, error: "You do not have the permission to login."});
         }
 
         if((await CustomerLogicHandler.instance.runAllCustomerLogicFunction("onLogin", {
